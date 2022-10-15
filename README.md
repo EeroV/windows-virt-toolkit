@@ -46,6 +46,7 @@ $WindowsServer2019Version = "Windows Server 2019 SERVERSTANDARD"
 $WindowsServer2016Version = "Windows Server 2016 SERVERSTANDARD"
 $WindowsServer2012R2Version = "Windows Server 2012 R2 SERVERSTANDARD"
 $WindowsServer2012Version = "Windows Server 2012 SERVERSTANDARD"
+$WindowsServer2022Version = "Windows Server 2022 SERVERSTANDARD"
 
 USING THE SCRIPT
 

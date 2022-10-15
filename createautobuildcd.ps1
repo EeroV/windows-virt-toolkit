@@ -4,8 +4,8 @@
 Set-Location $PSScriptroot
 
 #Guest Specific Variables - setup as necessary
-$AdministratorPasswordValue = 'P@ssword'
-$oslanguageandlocale = "en-gb"
+$AdministratorPasswordValue = 'P@assword'
+$oslanguageandlocale = "fi-fi"
 $numberofautologons = "1"
 
 #Below OS Versions must match the Caption as displayed in Dism get-wiminfo to enable automatic choice of the OS version in Unattend.xml
@@ -21,6 +21,8 @@ $WindowsServer2012R2Version = "Windows Server 2012 R2 SERVERSTANDARD"
 $WindowsServer2012Version = "Windows Server 2012 SERVERSTANDARD"
 $WindowsServer2008R2Version = "Windows Server 2012 SERVERSTANDARD"
 $WindowsServer2008Version = "Windows Server 2012 SERVERSTANDARD"
+$WindowsServer2022Version = "Windows Server 2022 SERVERSTANDARD"
+
 
 #region create autounattend.xml
 if (Test-Path "$PSScriptroot/Toolkit/Scripts/")
@@ -446,9 +448,9 @@ DISKCONFIGURATIONANDIMAGEINSTALL
 </unattend>
 '@
 
-$VALID_OS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19"
-$VALID_BIOS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19"
-$VALID_UEFI = "win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19"
+$VALID_OS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
+$VALID_BIOS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
+$VALID_UEFI = "win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
 
 $check = $false
 while ($check -eq $false)
@@ -530,6 +532,16 @@ if ($OSType -eq "win2k19")
         -replace 'NUMBEROFAUTOLOGONS', $numberofautologons `
 
     }
+
+if ($OSType -eq "win2k22")
+    {
+        $autounattendbase = $autounattendbase -replace "ADMINISTRATORPASSWORDVALUE", $AdministratorPasswordValue`
+        -replace 'OPERATINGSYSTEMIMAGENAME', $WindowsServer2022Version `
+        -replace 'OSLANGUAGEANDLOCALE', $oslanguageandlocale `
+        -replace 'NUMBEROFAUTOLOGONS', $numberofautologons `
+
+    }
+
 if ($OSType -eq "win2k16")
     {
         $autounattendbase = $autounattendbase -replace "ADMINISTRATORPASSWORDVALUE", $AdministratorPasswordValue`
@@ -597,6 +609,8 @@ start-sleep -Seconds 2
 powershell.exe -executionpolicy bypass -noprofile -file 'C:\Program Files\OpenSSH\install-sshd.ps1'
 start-sleep -Seconds 2
 netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
+# eero
+netsh advfirewall set allprofiles state off
 Start-Service sshd
 Set-Service sshd -StartupType Automatic
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
@@ -668,6 +682,11 @@ elseif ($OS.Caption -like "*Windows 7*" -and $OS.OSArchitecture -eq "32-bit" )
     { Get-ChildItem "$PSScriptRoot/drivers/win7-32" -Recurse -Filter "*.inf" | ForEach-Object { start-process "PNPUtil.exe" -Argumentlist "/add-driver $_.FullName /install" -Wait  } }
 elseif ($OS.Caption -like "*Windows Server 2019*" )
     { Get-ChildItem "$PSScriptRoot/drivers/win2k19" -Recurse -Filter "*.inf" | ForEach-Object { start-process "PNPUtil.exe" -Argumentlist "/add-driver $_.FullName /install" -Wait  } }
+
+elseif ($OS.Caption -like "*Windows Server 2022*" )
+    { Get-ChildItem "$PSScriptRoot/drivers/win2k22" -Recurse -Filter "*.inf" | ForEach-Object { start-process "PNPUtil.exe" -Argumentlist "/add-driver $_.FullName /install" -Wait  } }
+
+
 elseif ($OS.Caption -like "*Windows Server 2016*" )
     { Get-ChildItem "$PSScriptRoot/drivers/win2k16" -Recurse -Filter "*.inf" | ForEach-Object { start-process "PNPUtil.exe" -Argumentlist "/add-driver $_.FullName /install" -Wait  } }
 elseif ($OS.Caption -like "*Windows Server 2012R2*" )
@@ -718,6 +737,7 @@ New-Item -ItemType Directory "$PSScriptroot/Toolkit/Drivers/win2k12r2" -ErrorAct
 New-Item -ItemType Directory "$PSScriptroot/Toolkit/Drivers/win2k12" -ErrorAction SilentlyContinue
 New-Item -ItemType Directory "$PSScriptroot/Toolkit/Drivers/win2k8r2" -ErrorAction SilentlyContinue
 New-Item -ItemType Directory "$PSScriptroot/Toolkit/Drivers/win2k8" -ErrorAction SilentlyContinue
+New-Item -ItemType Directory "$PSScriptroot/Toolkit/Drivers/win2k22" -ErrorAction SilentlyContinue
 New-Item -ItemType Directory "$PSScriptroot/Toolkit/Certificates" -ErrorAction SilentlyContinue 
 New-Item -ItemType Directory "$PSScriptroot/Toolkit/QEMUGuestAgent" -ErrorAction SilentlyContinue
 New-Item -ItemType Directory "$PSScriptroot/ISOBuild" -ErrorAction SilentlyContinue
@@ -798,6 +818,7 @@ $virtiofiles | Where-Object {$_.FullName -like "*/w8/x86/*" -or $_.FullName -lik
 $virtiofiles | Where-Object {$_.FullName -like "*/w7/amd64/*" -or $_.FullName -like "*/amd64/w7/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win7-64" -ErrorAction SilentlyContinue
 $virtiofiles | Where-Object {$_.FullName -like "*/w7/x86/*" -or $_.FullName -like "*/i386/w7/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win7-32" -ErrorAction SilentlyContinue
 $virtiofiles | Where-Object {$_.FullName -like "*/2k19/amd64/*" -or $_.FullName -like "*/amd64/2k19/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win2k19-64" -ErrorAction SilentlyContinue
+$virtiofiles | Where-Object {$_.FullName -like "*/2k22/amd64/*" -or $_.FullName -like "*/amd64/2k22/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win2k22-64" -ErrorAction SilentlyContinue
 $virtiofiles | Where-Object {$_.FullName -like "*/2k16/amd64/*" -or $_.FullName -like "*/amd64/2k16/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win2k16-64" -ErrorAction SilentlyContinue
 $virtiofiles | Where-Object {$_.FullName -like "*/2k12R2/amd64/*" -or $_.FullName -like "*/amd64/2k12R2/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win2k12r2-64" -ErrorAction SilentlyContinue
 $virtiofiles | Where-Object {$_.FullName -like "*/2k12/amd64/*" -or $_.FullName -like "*/amd64/2k12/*"} | copy-item -Destination "$PSScriptroot/Toolkit/Drivers/win2k12-64" -ErrorAction SilentlyContinue
