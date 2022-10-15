@@ -4,7 +4,8 @@
 Set-Location $PSScriptroot
 
 #Guest Specific Variables - setup as necessary
-$AdministratorPasswordValue = 'P@assword'
+# read password from file
+$AdministratorPasswordValue = Get-Content -Path .\settings.inc
 $oslanguageandlocale = "fi-fi"
 $numberofautologons = "1"
 
