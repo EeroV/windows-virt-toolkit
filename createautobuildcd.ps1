@@ -451,12 +451,14 @@ DISKCONFIGURATIONANDIMAGEINSTALL
 $VALID_OS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
 $VALID_BIOS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
 $VALID_UEFI = "win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
+$DISABLE_FIREWALL= "no","yes"
 
 $check = $false
 while ($check -eq $false)
     {
         $OSType = read-host "Enter The Operating System"
         $UEFIorBIOS = Read-Host "Enter partitioning(UEFI or BIOS)"
+        $FirewallState = read-host "Disable firewall"
 
         if ($VALID_OS -contains $OSType)
             {
@@ -609,8 +611,9 @@ start-sleep -Seconds 2
 powershell.exe -executionpolicy bypass -noprofile -file 'C:\Program Files\OpenSSH\install-sshd.ps1'
 start-sleep -Seconds 2
 netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
-# eero
-netsh advfirewall set allprofiles state off
+
+
+
 Start-Service sshd
 Set-Service sshd -StartupType Automatic
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
@@ -719,6 +722,15 @@ if (($OS | Select-Object -expandproperty OSArchitecture) -eq "32-bit")
 #endregion
 
 '@
+
+
+
+if ($FirewallState -eq "yes")
+{
+$setupbase = $setupbase + "netsh advfirewall set allprofiles state off"
+
+}
+
 
 #region create directory structure
 
