@@ -4,9 +4,27 @@
 Set-Location $PSScriptroot
 
 #Guest Specific Variables - setup as necessary
-# read password from file
-$AdministratorPasswordValue = Get-Content -Path .\settings.inc
-$oslanguageandlocale = "fi-fi"
+# read configuration from file
+
+Get-Content settings.inc | Foreach-Object{
+   $var = $_.Split('=')
+   New-Variable -Name $var[0] -Value $var[1]
+}
+
+Write-Host "parameters from file"
+
+#AdministratorPasswordValue = dsffdsdsfdf
+#oslanguageandlocale = fi-fi
+#FirewallState = no
+#OSType = win2k22
+#UEFIorBIOS = bios
+
+# settigs from file
+Write-Host $AdministratorPasswordValue
+Write-Host $oslanguageandlocale
+Write-Host $FirewallState
+Write-Host $UEFIorBIOS
+
 $numberofautologons = "1"
 
 #Below OS Versions must match the Caption as displayed in Dism get-wiminfo to enable automatic choice of the OS version in Unattend.xml
@@ -454,39 +472,6 @@ $VALID_BIOS = "win7","win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2
 $VALID_UEFI = "win8","win8.1","win10","win2k8","win2k8r2","win2k12","win2k12r2","win2k16","win2k19","win2k22"
 $DISABLE_FIREWALL= "no","yes"
 
-$check = $false
-while ($check -eq $false)
-    {
-        $OSType = read-host "Enter The Operating System"
-        $UEFIorBIOS = Read-Host "Enter partitioning(UEFI or BIOS)"
-        $FirewallState = read-host "Disable firewall"
-
-        if ($VALID_OS -contains $OSType)
-            {
-                if ($UEFIorBIOS -eq "uefi")
-                    {
-                        if ($VALID_UEFI -contains $OSType)
-                        {   
-                            $check = $true
-                        }
-                        else {Write-Host "$OSType does not support UEFI"}
-                    }
-                elseif ($UEFIorBIOS -eq "bios")
-                    {
-                        if ($VALID_BIOS -contains $OSType)
-                        { 
-                            $check = $true
-                        }
-                        else {Write-Host "$OSType does not support BIOS"}
-                    }
-                else { Write-Host "Invalid option please choose UEFI or BIOS"}
-            }
-        else 
-            {  
-                Write-Host "Invalid OS type - ensure you are using libvirt values (valid options are : $VALID_OS)"
-                Return    
-            }
-    }
 
 if ($UEFIorBIOS -eq "uefi")
     {
