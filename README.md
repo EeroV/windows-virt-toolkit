@@ -36,16 +36,7 @@ Instructions:
 
 Use generate-settings.sh to generate settings.inc configuration file with following variables:
 
-#admin password
-AdministratorPasswordValue=
-#locale
-oslanguageandlocale=
-# os version
-OSType=
-# bios or uefi boot sector
-UEFIorBIOS=
-# disable firewall?
-FirewallState=
+AdministratorPasswordValue=,oslanguageandlocale=,OSType=,UEFIorBIOS=,FirewallState=
 
 Below OS Versions must match the Caption as displayed in "Dism /get-wiminfo" to enable automatic choice of the OS version 
 in Unattend.xml, you can change these to other versions if you like, if you blank them or write unsupported data you will
