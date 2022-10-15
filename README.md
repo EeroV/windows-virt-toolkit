@@ -31,10 +31,21 @@ Only Windows versions below are supported for now
  win8                 | Microsoft Windows 8                                | 6.2      | http://microsoft.com/win/8 
  win7                 | Microsoft Windows 7                                | 6.1      | http://microsoft.com/win/7
   
-Guest Specific Variables are used in the powershell script - please modify them if you want to change from the defaults
-$osinputlanguageandlocale = "en-gb"    -- This will not change the display language of the OS, just the keyboard language / regional settings
 
-Password is read from file .\settings.inc
+Instructions:
+
+Use generate-settings.sh to generate settings.inc configuration file with following variables:
+
+#admin password
+AdministratorPasswordValue=
+#locale
+oslanguageandlocale=
+# os version
+OSType=
+# bios or uefi boot sector
+UEFIorBIOS=
+# disable firewall?
+FirewallState=
 
 Below OS Versions must match the Caption as displayed in "Dism /get-wiminfo" to enable automatic choice of the OS version 
 in Unattend.xml, you can change these to other versions if you like, if you blank them or write unsupported data you will
