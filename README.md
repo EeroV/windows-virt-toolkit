@@ -19,6 +19,7 @@ SETUP INFO
 Only Windows versions below are supported for now
 
  
+ win2k22	      | Microsoft Windows Server 2022                      |          | http://microsoft.com/win/2k22
  win2k8               | Microsoft Windows Server 2008                      | 6.0      | http://microsoft.com/win/2k8
  win2k8r2             | Microsoft Windows Server 2008 R2                   | 6.1      | http://microsoft.com/win/2k8r2
  win2k12              | Microsoft Windows Server 2012                      | 6.3      | http://microsoft.com/win/2k12
