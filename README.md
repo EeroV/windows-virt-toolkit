@@ -77,5 +77,6 @@ Misc notes: (from: https://wiki.debian.org/KVM#Disk_I.2FO)
 - before shutdown issue following command in cmd.exe as admin: bcdedit /set {current} safeboot minimal
 - shutdown quest and remove main disk. add main disk with virt-io driver and same storage file
 - exit safe mode with msconfig and reboot or
-- exit safe mode with command bcdedit /deletevalue {current} safeboot 
+- exit safe mode with command bcdedit /deletevalue {current} safeboot
+- and reboot 
  
