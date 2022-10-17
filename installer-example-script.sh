@@ -1,7 +1,6 @@
 virt-install \
   --name Server2019 \
   --description "Windows Server 2019 auto-install" \
-  --os-type windows \
   --os-variant win2k19 \
   --memory 12000 \
   --vcpus 6 \
