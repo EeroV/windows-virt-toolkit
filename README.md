@@ -56,7 +56,9 @@ choose the setup iso that was created, click finish then choose Install Now
 Windows will begin installation and when completed will log on and finish installing the tools 
 
 
-Misc notes: (from: https://wiki.debian.org/KVM#Disk_I.2FO)
+HOW TO CHANGE BOOT DISK FROM SATA TO VIRTIO DRIVER
+
+(from: https://wiki.debian.org/KVM#Disk_I.2FO)
 - how to change disk driver to virt-io:
 - before shutdown issue following command in cmd.exe as admin: bcdedit /set {current} safeboot minimal
 - shutdown quest and remove main disk. add main disk with virt-io driver and same storage file
