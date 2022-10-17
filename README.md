@@ -66,3 +66,6 @@ HOW TO CHANGE BOOT DISK FROM SATA TO VIRTIO DRIVER
 - exit safe mode with command bcdedit /deletevalue {current} safeboot
 - and reboot 
  
+NO SUPPORT
+
+If it breaks, you get to keep both pieces.
