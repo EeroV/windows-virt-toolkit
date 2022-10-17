@@ -40,8 +40,7 @@ Use generate-settings.sh to fill needed values or create settings.inc manually.
 
 USING THE SCRIPT
 
-run powershell createautobuildcd.ps1 to start files generation
-script will prompt for the OS version and if you want UEFI or BIOS, and verify this will work
+run powershell createautobuildcd.ps1 to start files generation.
 script will check for exisiting downloaded support files, and if they dont exist fetch them into a Toolkit folder
 Script will then extract the drivers and support files for all OS versions
 Script will then create an ISO file in the script directory called %osversion%-setup.iso (for example win7-setup.iso)
