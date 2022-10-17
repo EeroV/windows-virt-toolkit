@@ -9,4 +9,5 @@ virt-install \
   --disk /home/eero/eeron-git/windows-virt-toolkit/win2k19-setup.iso,device=cdrom,bus=sata \
   --graphics spice,listen=127.0.0.1 \
   --noautoconsole \
+  --wait=-1 \
   --network bridge=br0-lan,model=virtio
